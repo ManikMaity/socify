@@ -3,9 +3,8 @@ import Navbar from '@/components/molicules/Navbar';
 
 export default function Home() {
   return (
-    <main>
-      <Navbar/>
+    <div>
       This is the home page
-    </main>
+    </div>
   );
 }

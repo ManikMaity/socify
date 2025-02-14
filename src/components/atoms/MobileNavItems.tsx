@@ -1,0 +1,55 @@
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+  } from "@/components/ui/sheet"
+import { Button } from "../ui/button"
+import { AlignJustify } from "lucide-react"
+import { navLinks } from "@/config/clientConfig"
+import Link from "next/link"
+import { ThemeToggle } from "./ThemeToggle"
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs"
+
+function MobileNavItems() {
+  return (
+    <Sheet>
+    <SheetTrigger asChild className="block md:hidden">
+      <Button variant="outline">
+        <AlignJustify/>
+      </Button>
+    </SheetTrigger>
+    <SheetContent>
+      <SheetHeader>
+        <SheetTitle>Menu</SheetTitle>
+      </SheetHeader>
+      <div className="grid gap-4 py-4">
+      {navLinks.map((link, index) => (
+        <Link key={index} href={link.href}>
+            <Button variant="ghost" className="w-full justify-start">
+                <link.icon/>
+                {link.title}
+            </Button>
+        </Link>
+    ))}
+    <div className="px-3 w-full flex justify-between">
+        <ThemeToggle/>
+        <div className="">
+        <SignedIn>
+            <UserButton />
+        </SignedIn>
+        <SignedOut>
+            <SignInButton mode="modal">
+                <Button>Sign In</Button>
+            </SignInButton>
+        </SignedOut>
+    </div>
+    </div>
+    </div>
+    </SheetContent>
+  </Sheet>
+  )
+}
+
+export default MobileNavItems
