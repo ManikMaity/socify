@@ -1,20 +1,11 @@
-import {
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton
-} from '@clerk/nextjs'
+import Navbar from '@/components/molicules/Navbar';
+
 
 export default function Home() {
   return (
-    <div>
-       <SignedOut>
-            <SignInButton mode="modal" />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
+    <main>
+      <Navbar/>
       This is the home page
-    </div>
+    </main>
   );
 }
