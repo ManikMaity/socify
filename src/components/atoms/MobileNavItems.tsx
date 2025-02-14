@@ -1,16 +1,17 @@
 import {
     Sheet,
     SheetContent,
+    SheetDescription,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
   } from "@/components/ui/sheet"
 import { Button } from "../ui/button"
-import { AlignJustify } from "lucide-react"
+import { AlignJustify, LogOutIcon } from "lucide-react"
 import { navLinks } from "@/config/clientConfig"
 import Link from "next/link"
 import { ThemeToggle } from "./ThemeToggle"
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs"
+import { SignedIn, SignedOut, SignInButton, SignOutButton, UserButton } from "@clerk/nextjs"
 
 function MobileNavItems() {
   return (
@@ -23,8 +24,10 @@ function MobileNavItems() {
     <SheetContent>
       <SheetHeader>
         <SheetTitle>Menu</SheetTitle>
+        <SheetDescription></SheetDescription>
       </SheetHeader>
       <div className="grid gap-4 py-4">
+      <SignedIn>
       {navLinks.map((link, index) => (
         <Link key={index} href={link.href}>
             <Button variant="ghost" className="w-full justify-start">
@@ -33,6 +36,13 @@ function MobileNavItems() {
             </Button>
         </Link>
     ))}
+    <SignOutButton>
+        <Button variant="destructive" >
+            <LogOutIcon/>
+            Logout
+        </Button>
+    </SignOutButton>
+    </SignedIn>
     <div className="px-3 w-full flex justify-between">
         <ThemeToggle/>
         <div className="">

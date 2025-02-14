@@ -13,6 +13,7 @@ function DestopNavItems() {
   return (
     <nav className="hidden md:flex items-center justify-end gap-4 md:gap-6 w-[50%]">
     <ThemeToggle/>
+    <SignedIn>
     {navLinks.map((link, index) => (
         <Link key={index} href={link.href}>
             <Button variant="ghost">
@@ -21,6 +22,7 @@ function DestopNavItems() {
             </Button>
         </Link>
     ))}
+    </SignedIn>
     <div className="flex justify-center items-center">
         <SignedIn>
             <UserButton />
