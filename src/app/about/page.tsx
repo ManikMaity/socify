@@ -1,5 +1,6 @@
 
-function About() {
+async function About() {
+  
     
   return (
     <div>
