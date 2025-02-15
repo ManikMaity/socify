@@ -33,3 +33,46 @@ export type UserWithCount = Prisma.UserGetPayload<{
       }
     }
   }>
+
+
+  export type HomePost = Prisma.PostGetPayload<{
+    include : {
+      author : {
+          select : {
+              name : true,
+              image : true,
+              username : true,
+              _count : {
+                  select : {
+                      followers : true
+                  }
+              }
+          }
+      },
+      comments : {
+          include : {
+              author : {
+                  select : {
+                      name : true,
+                      image : true,
+                      username : true
+                  }
+              }
+          },
+          orderBy : {
+              createdAt : "asc"
+          }
+      },
+      likes : {
+          select : {
+              userId : true
+          }
+      },
+      _count : {
+          select : {
+              likes : true,
+              comments : true
+          }
+      }
+  }
+  }>
