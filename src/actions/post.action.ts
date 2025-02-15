@@ -177,3 +177,31 @@ export async function createComment (postId : string, content : string) {
         return {success : false, error};
     }
 }
+
+export async function deletePost(postId : string) {
+    try {
+        const userId = await getDBUserId();
+        // post exits
+        const post = await prisma.post.findUnique({
+            where : {
+                id : postId
+            }
+        });
+        if (!post) throw new Error("Post not found");
+        // user not the author
+        if (post.authorId !== userId) throw new Error("User not authorized to delete this post");
+
+        await prisma.post.delete({
+            where : {
+                id : postId
+            }
+        });
+
+        revalidatePath("/");
+        return {success : true};
+    }
+    catch(error){
+        console.log("Error deleting post", error);
+        return {success : false, error};
+    }
+}
