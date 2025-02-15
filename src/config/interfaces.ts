@@ -18,3 +18,18 @@ export type UserWithCount = Prisma.UserGetPayload<{
       };
     };
   }>;
+
+
+  export type WhoToFollow = Prisma.UserGetPayload<{
+    select :{
+      id : true,
+      name : true,
+      username : true,
+      image : true,
+      _count : {
+        select : {
+          following : true
+        }
+      }
+    }
+  }>

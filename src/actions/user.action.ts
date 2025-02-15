@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { generateUsername } from "@/lib/utilFunc";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 
 export async function syncUser() {
   try {
@@ -62,4 +63,82 @@ export async function getDBUserId() {
   const user = await getUserDataByClerkId(clerkId);
   if (!user) throw new Error("User not found");
   return user.id;
+}
+
+export async function getThreeRandomUsers() {
+  try {
+    const userId = await getDBUserId();
+    const users = await prisma.user.findMany({
+      where : {
+        AND : [
+          {NOT : {id : userId}},
+          {NOT : {followers : {some : {followerId : userId}}}}
+        ]
+      },
+      select :{
+        id : true,
+        name : true,
+        username : true,
+        image : true,
+        _count : {
+          select : {
+            following : true
+          }
+        }
+      },
+      orderBy: {
+        followers : {
+          _count : "desc"
+        }
+      },
+      take: 3,
+    });
+
+  return {success : true, users};
+
+  }
+  catch(error){
+    return {success : false, users : []};
+  }
+}
+
+export async function toogleFollow(followerId : string) {
+  const userId = await getDBUserId();
+  if (followerId === userId) throw new Error("You cannot follow yourself");
+
+  const exitingFollow = await prisma.follow.findFirst({
+    where : {
+      followerId : userId,
+      followingId : followerId
+    }
+  });
+
+  if (exitingFollow) {
+    await prisma.follow.deleteMany({
+      where : {
+        followerId : userId,
+        followingId : followerId
+      }
+    });
+  }
+  else {
+    await prisma.$transaction([
+      prisma.follow.create({
+        data : {
+          followerId : userId,
+          followingId : followerId
+        }
+      }),
+
+      prisma.notification.create({
+        data : {
+          type : "FOLLOW",
+          userId : followerId,
+          creatorId : userId,
+        }
+      })
+    ])
+  }
+  revalidatePath("/");
+  return {success : true, type : exitingFollow ? "unfollow" : "follow"};
 }
