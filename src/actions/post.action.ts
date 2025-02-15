@@ -132,3 +132,48 @@ export async function toogleLike(postId : string) {
         return {success : false, error};
     }
 }
+
+export async function createComment (postId : string, content : string) {
+    try {
+        if (!content.trim()) throw new Error("Please enter some text");
+        const userId = await getDBUserId();
+        if (!userId) throw new Error("User not authenticated");
+        // post not found, throw error
+        const post = await prisma.post.findUnique({
+            where : {
+                id : postId
+            }
+        });
+        if (!post) throw new Error("Post not found");
+
+        const [comment] = await prisma.$transaction(async (tx) => {
+            const comment = await tx.comment.create({
+                data : {
+                    content : content,
+                    autorId : userId,
+                    postId : postId
+                }
+            })
+
+            if(post.authorId !== userId) {
+                await tx.notification.create({
+                    data : {
+                        type : "COMMENT",
+                        creatorId : userId,
+                        userId : post.authorId,
+                        postId : postId
+                    }
+                })
+            }
+            return [comment];
+        });
+
+        revalidatePath("/")
+        return {success : true, comment};
+        
+    }
+    catch(error){
+        console.log("Failed to create comment", error);
+        return {success : false, error};
+    }
+}
