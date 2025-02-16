@@ -52,7 +52,7 @@ function CreatePostCard() {
 
   return (
     <Card className="mb-6">
-    <CardContent className="pt-6">
+    <CardContent className="p-4 md:p-6">
       <div className="space-y-4">
         <div className="flex space-x-4">
           <Avatar className="w-10 h-10">

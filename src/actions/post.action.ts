@@ -32,6 +32,7 @@ export async function getPosts() {
             include : {
                 author : {
                     select : {
+                        id : true,
                         name : true,
                         image : true,
                         username : true,
@@ -202,6 +203,6 @@ export async function deletePost(postId : string) {
     }
     catch(error){
         console.log("Error deleting post", error);
-        return {success : false, error};
+        return {success : false};
     }
 }

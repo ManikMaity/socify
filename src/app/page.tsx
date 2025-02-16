@@ -14,7 +14,7 @@ export default async function Home() {
 
   return (
     <div className="grid grid-cols-10 gap-6">
-      <div className="lg:col-span-7 ">
+      <div className="lg:col-span-7 col-span-10 main-content">
         {user && <CreatePostCard/>}
         {posts.success && posts.posts ? <div className="space-y-6">
           {posts.posts.map((post) => (

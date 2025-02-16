@@ -39,6 +39,7 @@ export type UserWithCount = Prisma.UserGetPayload<{
     include : {
       author : {
           select : {
+              id : true,
               name : true,
               image : true,
               username : true,
@@ -76,3 +77,12 @@ export type UserWithCount = Prisma.UserGetPayload<{
       }
   }
   }>
+
+
+ export  interface AlertDialogProps {
+    isDeleting : boolean,
+    onDelete : () => Promise<void>,
+    title? : string,
+    description? : string,
+    children? : React.ReactNode
+}

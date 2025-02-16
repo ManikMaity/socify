@@ -54,6 +54,7 @@ export async function getUserDataByClerkId(clerkId: string) {
   }
   catch(error) {
     console.log("Error while getting user data", error);
+    throw error;
   }
 }
 
