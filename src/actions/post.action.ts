@@ -134,7 +134,7 @@ export async function toogleLike(postId : string) {
     }
 }
 
-export async function createComment (postId : string, content : string) {
+export async function createComment (content : string, postId : string) {
     try {
         if (!content.trim()) throw new Error("Please enter some text");
         const userId = await getDBUserId();
@@ -145,6 +145,7 @@ export async function createComment (postId : string, content : string) {
                 id : postId
             }
         });
+        console.log(post, postId);
         if (!post) throw new Error("Post not found");
 
         const [comment] = await prisma.$transaction(async (tx) => {
