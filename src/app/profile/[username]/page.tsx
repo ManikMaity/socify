@@ -1,6 +1,9 @@
+import { getProfileFromUsername } from "@/actions/profile.action"
 
-function ProfilePage({ params }: { params: { username: string } }) {
-  throw new Error('Not implemented');
+async function ProfilePage({ params }: { params: { username: string } }) {
+
+  const data = await getProfileFromUsername(params.username);
+
   return (
     <div>
      <p>{params.username}</p>
