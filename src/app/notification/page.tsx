@@ -1,9 +1,10 @@
+import { NotificationsSkeleton } from "@/components/atoms/skelitons/NotificationSkeliton";
 
 function Notifications() {
   return (
-    <div>
-      Notifications
-    </div>
+    <main>
+      <NotificationsSkeleton/>
+    </main>
   )
 }
 

@@ -1,5 +1,4 @@
-"use server"
-
+"use server";
 import prisma from "@/lib/prisma";
 import { getDBUserId } from "./user.action";
 
@@ -48,6 +47,25 @@ export async function getNotifications() {
     }
 }
 
+export async function getUnreadNotificationsCount() {
+    try {
+        const userId = await getDBUserId();
+        if (!userId) throw new Error("User not authenticated");
+        const count = await prisma.notification.count({
+            where : {
+                userId,
+                read : false
+            }
+        });
+
+        return {success : true, count};
+    }
+    catch (error) {
+        console.log(error);
+        return {success : false, count : 0};
+    }
+}
+
 export async function markNotificationAsRead(notificationIds : string[]) {
     try {
         const userId = await getDBUserId();
@@ -69,5 +87,26 @@ export async function markNotificationAsRead(notificationIds : string[]) {
     catch(err){
         console.log(err);
         throw new Error("Error while marking notifications as read");
+    }
+}
+
+export async function unReadNotifications(notificationId : string) {
+    try {
+        const userId = await getDBUserId();
+        if (!userId) throw new Error("User not authenticated");
+        const notification = await prisma.notification.update({
+            where : {
+                id : notificationId
+            },
+            data : {
+                read : false
+            }
+        });
+
+        return {success : true, notification};
+    }
+    catch (error) {
+        console.log(error);
+        throw new Error("Error while getting notifications");
     }
 }
