@@ -163,7 +163,8 @@ export async function createComment (content : string, postId : string) {
                         type : "COMMENT",
                         creatorId : userId,
                         userId : post.authorId,
-                        postId : postId
+                        postId : postId,
+                        commentId : comment.id
                     }
                 })
             }

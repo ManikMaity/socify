@@ -1,3 +1,4 @@
+import { getNotifications } from "@/actions/notification";
 import { Prisma } from "@prisma/client";
 import { LucideIcon } from "lucide-react";
 
@@ -86,3 +87,6 @@ export type UserWithCount = Prisma.UserGetPayload<{
     description? : string,
     children? : React.ReactNode
 }
+
+export type NotificationsType = Awaited<ReturnType<typeof getNotifications>>
+export type NotificationType = NotificationsType[number]

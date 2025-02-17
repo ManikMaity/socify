@@ -1,9 +1,9 @@
-import { NotificationsSkeleton } from "@/components/atoms/skelitons/NotificationSkeliton";
+import NotificationContainer from "@/components/organism/NotificationContainer";
 
 function Notifications() {
   return (
     <main>
-      <NotificationsSkeleton/>
+      <NotificationContainer/>
     </main>
   )
 }

@@ -90,23 +90,3 @@ export async function markNotificationAsRead(notificationIds : string[]) {
     }
 }
 
-export async function unReadNotifications(notificationId : string) {
-    try {
-        const userId = await getDBUserId();
-        if (!userId) throw new Error("User not authenticated");
-        const notification = await prisma.notification.update({
-            where : {
-                id : notificationId
-            },
-            data : {
-                read : false
-            }
-        });
-
-        return {success : true, notification};
-    }
-    catch (error) {
-        console.log(error);
-        throw new Error("Error while getting notifications");
-    }
-}

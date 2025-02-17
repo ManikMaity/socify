@@ -9,7 +9,7 @@ import {
 import { ThemeToggle } from "../atoms/ThemeToggle"
 import Link from "next/link"
 
-function DestopNavItems() {
+function DestopNavItems({notificationCount} : {notificationCount: number}) {
   return (
     <nav className="hidden md:flex items-center justify-end gap-4 md:gap-6 w-[50%]">
     <ThemeToggle/>
@@ -19,6 +19,7 @@ function DestopNavItems() {
             <Button variant="ghost">
                 <link.icon/>
                 {link.title}
+                {link.title === "Notification" && notificationCount > 0 && <span className="text-xs w-4 h-4 grid place-content-center rounded-full bg-blue-500 text-white">{notificationCount}</span>}
             </Button>
         </Link>
     ))}
