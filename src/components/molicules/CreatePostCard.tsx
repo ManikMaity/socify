@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 import { ImageIcon, Loader2Icon, SendIcon } from "lucide-react";
 import { createPost } from "@/actions/post.action";
 import { toast } from "react-toastify";
+import ImageUpload from "./ImageUpload";
 
 function CreatePostCard() {
 
@@ -16,32 +17,27 @@ function CreatePostCard() {
   const [imageUrl, setImageUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showImageUpload, setShowImageUpload] = useState(false);
-  const [isError, setIsError] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async () => {
     if (!content.trim() && !imageUrl) {
       toast.info("Please enter some text or upload an image");
       return;
     };
     setIsLoading(true);
-    setIsError(false);
     try {
       const result = await createPost(content, imageUrl);
       if (result?.success){
         setContent("");
         setImageUrl("");
         setShowImageUpload(false);
-        setIsError(false);
         toast.success("Post created successfully");
       }
       else {
-        setIsError(true);
         toast.error("Something went wrong");
       }
     }
     catch(error){
       console.log(error);
-      setIsError(true);
       toast.error("Something went wrong");
     }
     finally {
@@ -69,7 +65,10 @@ function CreatePostCard() {
 
         {(showImageUpload || imageUrl) && (
           <div className="border rounded-lg p-4">
-            
+            <ImageUpload endpoint="postImage" value={imageUrl} onChange={(url) => {
+              setImageUrl(url);
+              setShowImageUpload(false)
+            }} />
           </div>
         )}
 

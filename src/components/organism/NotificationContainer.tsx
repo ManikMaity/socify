@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client"
 
 import { getNotifications, markNotificationAsRead } from "@/actions/notification";
@@ -8,7 +9,6 @@ import { NotificationsSkeleton } from "../atoms/skelitons/NotificationSkeliton";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { ScrollArea } from "../ui/scroll-area";
 import { Avatar, AvatarImage } from "../ui/avatar";
-import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
 import { getNotificationIcon } from "@/lib/utilJsx";
 
@@ -28,6 +28,7 @@ function NotificationContainer() {
         if (unreadNotifications.length > 0) await markNotificationAsRead(unreadNotifications);
       }
       catch (error) {
+        console.log(error);
         toast.error("Error while getting notifications");
       }
       finally {
@@ -92,7 +93,7 @@ function NotificationContainer() {
                         <div className="text-sm text-muted-foreground rounded-md p-2 bg-muted/30 mt-2">
                           <p>{notification.post.content}</p>
                           {notification.post.image && (
-                            <Image
+                            <img
                               src={notification.post.image}
                               alt="Post content"
                               className="mt-2 rounded-md w-full max-w-[200px] h-auto object-cover"

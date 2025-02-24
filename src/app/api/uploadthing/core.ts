@@ -20,6 +20,7 @@ export const ourFileRouter = {
         return { fileUrl: file.url };
       } catch (error) {
         console.error("Error in onUploadComplete:", error);
+        console.error("Metadata:", metadata);
         throw error;
       }
     }),

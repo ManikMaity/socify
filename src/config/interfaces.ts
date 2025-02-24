@@ -98,6 +98,8 @@ export type LikedPostData = LikedPostsData[number];
 export type IsFollowing = Awaited<ReturnType<typeof isFollowingUser>>;
 
 
-
-
-
+export interface  ImageUploadProps {
+  onChange : (url : string) => void,
+  value : string,
+  endpoint : "postImage",
+}

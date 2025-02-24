@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import { createComment, deletePost, toogleLike } from "@/actions/post.action";
 import { HomePost } from "@/config/interfaces";
@@ -10,7 +11,6 @@ import { HeartIcon, Loader2, LogInIcon, MessageCircleIcon, SendIcon, TrashIcon }
 import { SignInButton, useUser } from "@clerk/nextjs";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
-import Image from "next/image";
 import {formatDistanceToNow} from "date-fns"
 import DeleteAlertDialog from "../atoms/DeleteAlertDialog";
 
@@ -46,6 +46,7 @@ function PostCard({
       await toogleLike(postData.id);
     } catch (error) {
       toast.error("Error while liking post");
+      console.log("Error while liking post", error);
       setOptimisticLikeCount(postData._count.likes);
       setLiked(postData.likes.some((like) => like.userId === userId));
     } finally {
@@ -62,11 +63,11 @@ function PostCard({
         setNewComment("");
         toast.success("Comment created successfully");
       } else {
-        // @ts-expect-error
-        toast.error(result.error.message || "Error while commenting on post");
+        toast.error("Error while commenting on post");
       }
     } catch (error) {
       toast.error("Error while commenting on post");
+      console.log("Error while commenting on post", error);
     } finally {
       setIsCommenting(false);
     }
@@ -82,6 +83,7 @@ function PostCard({
       } else throw new Error("Error while deleting post");
     } catch (error) {
       toast.error("Error while deleting post");
+      console.log("Error while deleting post", error);
     } finally {
       setIsDeleting(false);
     }
@@ -131,7 +133,7 @@ function PostCard({
           {/* POST IMAGE */}
           {postData.image && (
             <div className="rounded-lg overflow-hidden">
-              <Image src={postData.image} alt="Post content" className="w-full h-auto object-cover" />
+              <img src={postData.image} alt="Post content" className="w-full h-auto object-cover" />
             </div>
           )}
 

@@ -58,6 +58,7 @@ function ProfilePageClientComponent({data, isCurrentlyFollowing = false, likedPo
         }
     }
     catch(err){
+      console.log(err);
       toast.error("Failed to follow user");
     }
     finally{

@@ -1,6 +1,5 @@
 import { WhoToFollow } from "@/config/interfaces"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
-import { Button } from "../ui/button"
 import FollowBtn from "./FollowBtn"
 
 function FollowCard({followUser} : {followUser : WhoToFollow}) {
