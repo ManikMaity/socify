@@ -4,6 +4,22 @@ import prisma from "@/lib/prisma";
 import { getDBUserId } from "./user.action";
 import { revalidatePath } from "next/cache";
 
+export async function getBasicUserDataFromUsername(username: string) {
+    try {
+        const user = await prisma.user.findUnique({
+            where : {
+                username : username
+            }
+        })
+
+        return user;
+    }
+    catch(error){
+        console.log("Error while getting basic user data", error);
+        return null;
+    }
+}
+
 export async function getProfileFromUsername(username: string) {
   try {
     const user = await prisma.user.findUnique({
@@ -12,6 +28,7 @@ export async function getProfileFromUsername(username: string) {
       },
       select: {
         id: true,
+        clerkId: true,
         name: true,
         username: true,
         image: true,
@@ -25,6 +42,8 @@ export async function getProfileFromUsername(username: string) {
             content: true,
             image: true,
             createdAt: true,
+            updatedAt: true,
+            authorId: true,
             author: {
               select: {
                 id: true,
@@ -187,7 +206,7 @@ export async function isFollowingUser(userId: string) {
     })
 
     return !!isFollowing;
-    
+
   } catch (error) {
     console.log("Error while checking if user is following", error);
     throw new Error("Error while checking if user is following");

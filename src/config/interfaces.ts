@@ -1,4 +1,5 @@
 import { getNotifications } from "@/actions/notification";
+import { getProfileFromUsername, getUserLikedPosts, isFollowingUser } from "@/actions/profile.action";
 import { Prisma } from "@prisma/client";
 import { LucideIcon } from "lucide-react";
 
@@ -90,3 +91,13 @@ export type UserWithCount = Prisma.UserGetPayload<{
 
 export type NotificationsType = Awaited<ReturnType<typeof getNotifications>>
 export type NotificationType = NotificationsType[number]
+
+export type ProfileData = Awaited<ReturnType<typeof getProfileFromUsername>>;
+export type LikedPostsData = Awaited<ReturnType<typeof getUserLikedPosts>>;
+export type LikedPostData = LikedPostsData[number];
+export type IsFollowing = Awaited<ReturnType<typeof isFollowingUser>>;
+
+
+
+
+
