@@ -19,7 +19,7 @@ async function Navbar() {
         </Link>
       </div>
       <DestopNavItems notificationCount={notificationCount.count} />
-      <MobileNavItems notificationCount={notificationCount.count} />
+      <MobileNavItems />
     </header>
   );
 }

@@ -2,12 +2,15 @@ import { getBasicUserDataFromUsername, getProfileFromUsername, getUserLikedPosts
 import NotFound from "@/app/not-found";
 import ProfilePageClientComponent from "@/components/organism/ProfilePageClientComponent";
 
-export  async function generateMetadata({ params }: { params: { username: string } }) {
-  const userData = await getBasicUserDataFromUsername(params.username);
+export  async function generateMetadata({ params }: { params: Promise<{ username: string }> }) {
+
+  const param = await params;
+
+  const userData = await getBasicUserDataFromUsername(param.username);
 
   return {
-    title: userData?.name || params.username,
-    description : userData?.bio || `Check out ${params.username}'s profile`,
+    title: userData?.name || param.username,
+    description : userData?.bio || `Check out ${param.username}'s profile`,
   }
 }
 

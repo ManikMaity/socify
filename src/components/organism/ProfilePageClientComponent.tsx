@@ -180,7 +180,7 @@ function ProfilePageClientComponent({data, isCurrentlyFollowing = false, likedPo
         <TabsContent value="posts" className="mt-6">
           <div className="space-y-6">
             {data?.posts?.length ?? 0 > 0 ? (
-              data.posts.map((post) => <PostCard key={post.id} postData={post} userId={data.id} />)
+              data?.posts?.map((post) => <PostCard key={post.id} postData={post} userId={data.id} />)
             ) : (
               <div className="text-center py-8 text-muted-foreground">No posts yet</div>
             )}
@@ -190,7 +190,7 @@ function ProfilePageClientComponent({data, isCurrentlyFollowing = false, likedPo
         <TabsContent value="likes" className="mt-6">
           <div className="space-y-6">
             {likedPost.length > 0 ? (
-              likedPost.map((post) => <PostCard key={post.id} postData={post} userId={data.id} />)
+              likedPost.map((post, index) => <PostCard key={post.id} postData={post} userId={data?.id || `${index}`} />)
             ) : (
               <div className="text-center py-8 text-muted-foreground">No liked posts to show</div>
             )}
