@@ -234,3 +234,31 @@ export async function getPostsByTextQuery (text : string) {
 
     return {success : true, posts};
 }
+
+export async function getUserBySearchQuery (text : string) {
+    if (text.trim() == "") return {success : true, users : []};
+    const userId = await getDBUserId();
+    if (!userId) throw new Error("Youre not authenticated");
+    const users = await prisma.user.findMany({
+        where : {
+            OR : [
+                {name : {contains : text}},
+                {username : {contains : text}}
+            ]
+        },
+        select : {
+            id : true,
+            name : true,
+            username : true,
+            image : true,
+            _count : {
+                select : {
+                    followers : true,
+                    following : true
+                }
+            }
+        }
+    });
+
+    return {success : true, users};
+}

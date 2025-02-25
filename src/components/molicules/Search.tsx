@@ -8,23 +8,28 @@ import {
 } from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
 import SearchContent from "../atoms/SearchContent";
-import { getPostsByTextQuery } from "@/actions/post.action";
+import { getPostsByTextQuery, getUserBySearchQuery } from "@/actions/post.action";
 import { toast } from "react-toastify";
-import { SearchPost } from "@/config/interfaces";
+import { SearchPost, SearchUser } from "@/config/interfaces";
+import useDebounce from "@/hooks/useDebounce";
 
 function Search() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchResult, setSearchResult] = useState<SearchPost[]>([]);
+  const [searchUserResult, setSearchUserResult] = useState<SearchUser[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
+  const debounceSearchQuery = useDebounce(searchQuery, 1000);
 
 
  async function searchPosts(searchQuery : string) {
     setLoading(true);
     try {
         const res = await getPostsByTextQuery(searchQuery);
-        if (res.success) setSearchResult(res.posts);
-        console.log("Search result", res.posts);
+        const users = await getUserBySearchQuery(searchQuery);
+        if (res.success) {setSearchResult(res.posts);}
+        if (users.success) {setSearchUserResult(users.users);}
+        console.log("Search result", res.posts, users.users);
     }
     catch (error) {
         toast.error("Error while searching posts");
@@ -36,21 +41,22 @@ function Search() {
   }
 
   useEffect(() => {
-    if (searchQuery.trim() === "") {
+    if (debounceSearchQuery.trim() === "") {
         setSearchResult([]);
+        setSearchUserResult([]);
         return;
     };
-    searchPosts(searchQuery);
-  }, [searchQuery]);
+    searchPosts(debounceSearchQuery);
+  }, [debounceSearchQuery]);
 
   return (
     <>
       <Button
         variant="ghost"
         onClick={() => setIsSearchOpen(true)}
-        className="w-[20%] flex justify-between items-center"
+        className="flex justify-between items-center"
       >
-        <p>Search here...</p>
+        <p className="hidden md:block">Search here...</p>
         <SearchIcon />
       </Button>
       <Dialog open={isSearchOpen} onOpenChange={() => setIsSearchOpen(false)}>
@@ -67,7 +73,7 @@ function Search() {
             />
           </div>
           <hr className="my-2" />
-          {loading ? <div className="flex items-center justify-center"><Loader2 className="animate-spin text-center" /></div> : <SearchContent postSeachResult={searchResult}/>}
+          {loading ? <div className="flex items-center justify-center"><Loader2 className="animate-spin text-center" /></div> : <SearchContent searchUserResult={searchUserResult} postSeachResult={searchResult}/>}
         </DialogContent>
       </Dialog>
     </>
