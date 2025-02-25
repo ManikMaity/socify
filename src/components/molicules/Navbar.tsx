@@ -4,6 +4,7 @@ import MobileNavItems from "../atoms/MobileNavItems";
 import { currentUser } from "@clerk/nextjs/server";
 import { syncUser } from "@/actions/user.action";
 import { getUnreadNotificationsCount } from "@/actions/notification";
+import Search from "./Search";
 
 async function Navbar() {
 
@@ -18,6 +19,7 @@ async function Navbar() {
           <h1 className="text-2xl font-bold">Soci<span className="text-blue-500">fy</span></h1>
         </Link>
       </div>
+      <Search/>
       <DestopNavItems notificationCount={notificationCount.count} />
       <MobileNavItems />
     </header>

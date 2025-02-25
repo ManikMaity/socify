@@ -184,14 +184,12 @@ export async function createComment (content : string, postId : string) {
 export async function deletePost(postId : string) {
     try {
         const userId = await getDBUserId();
-        // post exits
         const post = await prisma.post.findUnique({
             where : {
                 id : postId
             }
         });
         if (!post) throw new Error("Post not found");
-        // user not the author
         if (post.authorId !== userId) throw new Error("User not authorized to delete this post");
 
         await prisma.post.delete({
@@ -207,4 +205,32 @@ export async function deletePost(postId : string) {
         console.log("Error deleting post", error);
         return {success : false};
     }
+}
+
+export async function getPostsByTextQuery (text : string) {
+    if (text.trim() == "") return {success : true, posts : []};
+    const userId = await getDBUserId();
+    if (!userId) throw new Error("Youre not authenticated");
+    const posts = await prisma.post.findMany({
+        where : {
+            content : {contains : text}
+        },
+        include : {
+            author : {
+                select : {
+                    id : true,
+                    name : true,
+                    image : true,
+                    username : true,
+                    _count : {
+                        select : {
+                            followers : true
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    return {success : true, posts};
 }

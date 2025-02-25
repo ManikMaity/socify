@@ -1,4 +1,5 @@
 import { getNotifications } from "@/actions/notification";
+import { getPostsByTextQuery } from "@/actions/post.action";
 import { getProfileFromUsername, getUserLikedPosts, isFollowingUser } from "@/actions/profile.action";
 import { Prisma } from "@prisma/client";
 import { LucideIcon } from "lucide-react";
@@ -103,3 +104,6 @@ export interface  ImageUploadProps {
   value : string,
   endpoint : "postImage",
 }
+
+
+export type SearchPost =  Awaited<ReturnType<typeof getPostsByTextQuery>>["posts"][0];
