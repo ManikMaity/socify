@@ -7,12 +7,13 @@ import { toast } from "react-toastify";
 import { Card, CardContent } from "../ui/card";
 import Link from "next/link";
 import { Avatar, AvatarImage } from "../ui/avatar";
-import { HeartIcon, Loader2, LogInIcon, MessageCircleIcon, SendIcon, TrashIcon } from "lucide-react";
+import { HeartIcon, Loader2, LogInIcon, MessageCircleIcon, SendIcon, Share2, TrashIcon } from "lucide-react";
 import { SignInButton, useUser } from "@clerk/nextjs";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import {formatDistanceToNow} from "date-fns"
 import DeleteAlertDialog from "../atoms/DeleteAlertDialog";
+import ShareDialog from "../atoms/ShareDialog";
 
 function PostCard({
   postData,
@@ -25,6 +26,7 @@ function PostCard({
   const [isCommenting, setIsCommenting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [newComment, setNewComment] = useState("");
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [liked, setLiked] = useState(
     postData.likes.some((like) => like.userId === userId)
   );
@@ -123,6 +125,7 @@ function PostCard({
                     <span>{formatDistanceToNow(new Date(postData.createdAt))} ago</span>
                   </div>
                 </div>
+                <div>
                 {/* Check if current user is the post author */}
                 {userId === postData.author.id && (
                   <DeleteAlertDialog isDeleting={isDeleting} onDelete={handleDelete} >
@@ -131,6 +134,11 @@ function PostCard({
                     </Button>
                     </DeleteAlertDialog>
                 )}
+                <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => setIsShareModalOpen(true)}>
+                  <Share2/>
+                </Button>
+                <ShareDialog url={`${window.location.origin}/post/${postData.id}`} open={isShareModalOpen} onClose={() => setIsShareModalOpen(false)}/>
+                </div>
               </div>
               <p className={`mt-2 text-sm text-foreground ${showFullContent ? "" : "line-clamp-5"}`} onClick={() => setShowFullContent(!showFullContent)}>{postData.content}</p>
               

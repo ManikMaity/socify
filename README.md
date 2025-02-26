@@ -38,8 +38,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Features to Implement future
 - Like comment and repply to comment
-- Tag user
-- Message friend user
+- Tag user ✔️
+- Message friend user 
 - Edit post
 - Share post
 - Search post and user ✔️
