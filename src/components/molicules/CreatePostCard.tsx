@@ -32,7 +32,7 @@ function CreatePostCard() {
     };
     setIsLoading(true);
     try {
-      const result = await createPost(content, imageUrl);
+      const result = await createPost(content, imageUrl, taggedUsers.map(u => u.id));
       if (result?.success){
         setContent("");
         setImageUrl("");

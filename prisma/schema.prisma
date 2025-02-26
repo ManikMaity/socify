@@ -27,6 +27,7 @@ model User {
   following Follow[] @relation("following")
   notification Notification[] @relation("userNotification")
   notificationCreated Notification[] @relation("notificationCreator")
+  taggedUser TaggedUser[]
 }
 
 model Post {
@@ -40,6 +41,17 @@ model Post {
   comments  Comment[]
   likes     Like[]
   notification Notification[]
+  taggedUser TaggedUser[]
+}
+
+model TaggedUser {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  @@index([userId,postId])
 }
 
 model Comment {
@@ -101,4 +113,5 @@ enum NotificationType {
   LIKE
   COMMENT
   FOLLOW
+  TAG
 }

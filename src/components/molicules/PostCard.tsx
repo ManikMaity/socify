@@ -100,17 +100,24 @@ function PostCard({
               </Avatar>
             </Link>
 
-            {/* POST HEADER & TEXT CONTENT */}
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 truncate">
+                <div className="flex flex-col truncate">
+                  <div className="flex items-center space-x-1">
                   <Link
                     href={`/profile/${postData.author.username}`}
                     className="font-semibold truncate"
                   >
                     {postData.author.name}
                   </Link>
-                  <div className="flex items-center space-x-2 sm:text-sm text-muted-foreground text-xs">
+                  {(postData.taggedUser && postData.taggedUser.length > 0) && (
+                    <div className="flex items-center space-x-1 text-muted-foreground text-sm">
+                      <span className="text-muted-foreground"> - with </span>
+                      {postData.taggedUser.map((user, index) => <Link key={user.user.id} href={`/profile/${user.user.username}`} className="text-primary font-semibold">{user.user.name}{index !== postData.taggedUser.length - 1 && ","}</Link>)}
+                    </div>
+                  )}
+                  </div>
+                  <div className="flex items-center space-x-1 text-muted-foreground text-xs">
                     <Link href={`/profile/${postData.author.username}`}>@{postData.author.username}</Link>
                     <span>•</span>
                     <span>{formatDistanceToNow(new Date(postData.createdAt))} ago</span>

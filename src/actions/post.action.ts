@@ -4,10 +4,11 @@ import prisma from "@/lib/prisma";
 import { getDBUserId } from "./user.action"
 import { revalidatePath } from "next/cache";
 
-export async function createPost(content: string, imageUrl: string) {
+export async function createPost(content: string, imageUrl: string, taggedUsers: string[]) {
     try {
         const userId = await getDBUserId();
         if (!userId) return;
+
         const post = await prisma.post.create({
             data : {
                 content,
@@ -15,6 +16,15 @@ export async function createPost(content: string, imageUrl: string) {
                 authorId: userId,
             }
         })
+
+        if (taggedUsers.length > 0) {
+            await prisma.taggedUser.createMany({
+                data : taggedUsers.map(userId => ({
+                    userId,
+                    postId : post.id
+                }))
+            })
+        }
 
         revalidatePath("/");
         return {success : true, post};
@@ -30,6 +40,18 @@ export async function getPosts() {
         const posts = await prisma.post.findMany({
             orderBy : {createdAt : "desc"},
             include : {
+                taggedUser : {
+                    include : {
+                        user : {
+                            select : {
+                                id : true,
+                                name : true,
+                                username : true,
+                                image : true
+                            }
+                        }
+                    }
+                },
                 author : {
                     select : {
                         id : true,
@@ -74,7 +96,7 @@ export async function getPosts() {
         return {success : true, posts};
     }
     catch(error){
-        return {success : false, error};
+        return {success : false, posts : []};
     }
 }
 
@@ -133,6 +155,7 @@ export async function toogleLike(postId : string) {
         return {success : false, error};
     }
 }
+
 
 export async function createComment (content : string, postId : string) {
     try {

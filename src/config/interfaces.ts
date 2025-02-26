@@ -1,5 +1,5 @@
 import { getNotifications } from "@/actions/notification";
-import { getPostsByTextQuery, getUserBySearchQuery } from "@/actions/post.action";
+import { getPosts, getPostsByTextQuery, getUserBySearchQuery } from "@/actions/post.action";
 import { getProfileFromUsername, getUserLikedPosts, isFollowingUser } from "@/actions/profile.action";
 import { Prisma } from "@prisma/client";
 import { LucideIcon } from "lucide-react";
@@ -38,48 +38,7 @@ export type UserWithCount = Prisma.UserGetPayload<{
   }>
 
 
-  export type HomePost = Prisma.PostGetPayload<{
-    include : {
-      author : {
-          select : {
-              id : true,
-              name : true,
-              image : true,
-              username : true,
-              _count : {
-                  select : {
-                      followers : true
-                  }
-              }
-          }
-      },
-      comments : {
-          include : {
-              author : {
-                  select : {
-                      name : true,
-                      image : true,
-                      username : true
-                  }
-              }
-          },
-          orderBy : {
-              createdAt : "asc"
-          }
-      },
-      likes : {
-          select : {
-              userId : true
-          }
-      },
-      _count : {
-          select : {
-              likes : true,
-              comments : true
-          }
-      }
-  }
-  }>
+  export type HomePost = Awaited<ReturnType<typeof getPosts>>["posts"][0];
 
 
  export  interface AlertDialogProps {
