@@ -137,7 +137,7 @@ function PostCard({
                 <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => setIsShareModalOpen(true)}>
                   <Share2/>
                 </Button>
-                <ShareDialog url={`${window.location.origin}/post/${postData.id}`} open={isShareModalOpen} onClose={() => setIsShareModalOpen(false)}/>
+                <ShareDialog url={`${window.location.origin}/post/${postData.id}`} open={isShareModalOpen} onClose={() => setIsShareModalOpen(false)} title="Share the post"/>
                 </div>
               </div>
               <p className={`mt-2 text-sm text-foreground ${showFullContent ? "" : "line-clamp-5"}`} onClick={() => setShowFullContent(!showFullContent)}>{postData.content}</p>

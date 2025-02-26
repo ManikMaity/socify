@@ -41,11 +41,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - Tag user ✔️
 - Message friend user 
 - Edit post
-- Share post
+- Share post ✔️
 - Search post and user ✔️
 - Add friend and remove friend by request
 - Add status 
 - Add multiple image
-- Copy post link
+- Copy post link ✔️
 - Add yt video link
 - Add reels video feature

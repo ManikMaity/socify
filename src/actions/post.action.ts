@@ -285,3 +285,71 @@ export async function getUserBySearchQuery (text : string) {
 
     return {success : true, users};
 }
+
+export async function getPostById (postId : string) {
+    try {
+        const post = await prisma.post.findUnique({
+            where : {
+                id : postId
+            },
+            include : {
+                taggedUser : {
+                    include : {
+                        user : {
+                            select : {
+                                id : true,
+                                name : true,
+                                username : true,
+                                image : true
+                            }
+                        }
+                    }
+                },
+                author : {
+                    select : {
+                        id : true,
+                        name : true,
+                        image : true,
+                        username : true,
+                        _count : {
+                            select : {
+                                followers : true
+                            }
+                        }
+                    }
+                },
+                comments : {
+                    include : {
+                        author : {
+                            select : {
+                                name : true,
+                                image : true,
+                                username : true
+                            }
+                        }
+                    },
+                    orderBy : {
+                        createdAt : "asc"
+                    }
+                },
+                likes : {
+                    select : {
+                        userId : true
+                    }
+                },
+                _count : {
+                    select : {
+                        likes : true,
+                        comments : true
+                    }
+                }
+            }
+        });
+
+        return {success : true, post};
+    }
+    catch(error){
+        console.log("Error getting post by id", error);
+        return {success : false, post : null};
+    }
+}
