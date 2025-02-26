@@ -68,7 +68,7 @@ function Search() {
               type="text"
               value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search messages here"
+              placeholder="Search posts here"
               className="bg-transparent h-full w-full outline-none"
             />
           </div>

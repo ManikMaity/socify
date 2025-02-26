@@ -108,3 +108,10 @@ export interface  ImageUploadProps {
 
 export type SearchPost =  Awaited<ReturnType<typeof getPostsByTextQuery>>["posts"][0];
 export type SearchUser =  Awaited<ReturnType<typeof getUserBySearchQuery>>["users"][0];
+
+export type TagUser = {
+  id : string,
+  name : string,
+  username : string,
+  image : string
+}
