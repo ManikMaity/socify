@@ -1,6 +1,7 @@
 import { getNotifications } from "@/actions/notification";
 import { getPosts, getPostsByTextQuery, getUserBySearchQuery } from "@/actions/post.action";
 import { getProfileFromUsername, getUserLikedPosts, isFollowingUser } from "@/actions/profile.action";
+import { getReels } from "@/actions/reel.action";
 import { Prisma } from "@prisma/client";
 import { LucideIcon } from "lucide-react";
 
@@ -74,3 +75,5 @@ export type TagUser = {
   username : string,
   image : string
 }
+
+export type ReelType = Awaited<ReturnType<typeof getReels>>["reels"][0];

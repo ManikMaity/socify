@@ -156,7 +156,6 @@ export async function toogleLike(postId : string) {
     }
 }
 
-
 export async function createComment (content : string, postId : string) {
     try {
         if (!content.trim()) throw new Error("Please enter some text");

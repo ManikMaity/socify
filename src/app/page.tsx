@@ -11,7 +11,7 @@ export default async function Home() {
   const user = await currentUser();
   const posts = await getPosts();
   const userId = await getDBUserId();
-
+  
   return (
     <div className="grid grid-cols-10 gap-6">
       <div className="lg:col-span-7 col-span-10 main-content">

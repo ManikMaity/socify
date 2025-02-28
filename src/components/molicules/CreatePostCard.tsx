@@ -5,13 +5,15 @@ import { useState } from "react";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { ImageIcon, Loader2Icon, SendIcon, User } from "lucide-react";
+import { ImageIcon, Loader2Icon, SendIcon, User, VideoIcon } from "lucide-react";
 import { createPost } from "@/actions/post.action";
 import { toast } from "react-toastify";
 import ImageUpload from "./ImageUpload";
 import TagUserSearch from "../atoms/TagUserSearch";
 import { SearchUser } from "@/config/interfaces";
 import TooltipProv from "../atoms/TooltipProv";
+import VideoUpload from "./VideoUpload";
+import { createReel } from "@/actions/reel.action";
 
 function CreatePostCard() {
 
@@ -22,8 +24,36 @@ function CreatePostCard() {
   const [showImageUpload, setShowImageUpload] = useState(false);
   const [showTagUserInput, setShowTagUserInput] = useState(false);
   const [taggedUsers, setTaggedUsers] = useState<SearchUser[]>([]);
+  const [videoUrl, setVideoUrl] = useState("");
+  const [showVideoUpload, setShowVideoUpload] = useState(false);
 
-  
+
+  const handleReelSubmit = async () => {
+    if (!videoUrl) {
+      toast.info("Please upload a video");
+      return;
+    };
+    setIsLoading(true);
+    try {
+      const result = await createReel(content, videoUrl);
+      if (result?.success){
+        setContent("");
+        setVideoUrl("");
+        setShowVideoUpload(false);
+        toast.success("Reel created successfully");
+      }
+      else {
+        toast.error("Something went wrong");
+      }
+    }
+    catch(error){
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+    finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleSubmit = async () => {
     if (!content.trim() && !imageUrl) {
@@ -100,6 +130,17 @@ function CreatePostCard() {
           </div>
         )}
 
+        {
+          (showVideoUpload || videoUrl) && (
+            <div className="border rounded-lg p-4">
+              <VideoUpload endpoint="postVideo" value={videoUrl} onChange={(url) => {
+                setVideoUrl(url);
+                setShowVideoUpload(false)
+              }} />
+            </div>
+          )
+        }
+
         <div className="flex items-center justify-between border-t pt-4">
           <div className="flex space-x-2">
             <Button
@@ -118,6 +159,17 @@ function CreatePostCard() {
               variant="ghost"
               size="sm"
               className="text-muted-foreground hover:text-primary"
+              onClick={() => setShowVideoUpload(!showVideoUpload)}
+              disabled={isLoading}
+            >
+              <VideoIcon className="size-4 mr-2" />
+              Reel
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="text-muted-foreground hover:text-primary"
               onClick={() => setShowTagUserInput(!showTagUserInput)}
               disabled={isLoading}
             >
@@ -126,6 +178,8 @@ function CreatePostCard() {
             </Button>
             <TagUserSearch taggedUsers={taggedUsers} setTaggedUsers={setTaggedUsers} open={showTagUserInput} onOpenChange={() => setShowTagUserInput(false)}/>
           </div>
+          
+          <div className="flex space-x-2">
           <Button
             className="flex items-center"
             onClick={handleSubmit}
@@ -143,6 +197,26 @@ function CreatePostCard() {
               </>
             )}
           </Button>
+
+          <Button
+            className="flex items-center"
+            onClick={handleReelSubmit}
+            disabled={(!videoUrl) || isLoading || !!imageUrl}
+          >
+            {isLoading ? (
+              <>
+                <Loader2Icon className="size-4 animate-spin" />
+                Posting...
+              </>
+            ) : (
+              <>
+                <SendIcon className="size-4 mr-2" />
+                Post Reel
+              </>
+            )}
+          </Button>
+          </div>
+
         </div>
       </div>
     </CardContent>
