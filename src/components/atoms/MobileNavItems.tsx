@@ -50,7 +50,7 @@ function MobileNavItems() {
             <UserButton />
         </SignedIn>
         <SignedOut>
-            <SignInButton mode="modal">
+            <SignInButton>
                 <Button>Sign In</Button>
             </SignInButton>
         </SignedOut>
