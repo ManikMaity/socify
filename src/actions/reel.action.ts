@@ -149,13 +149,32 @@ export async function createReelComment (content : string, reelId : string) {
         });
         console.log(reel, userId);
         if (!reel) throw new Error("Reel not found");
-        const comment = await prisma.comment.create({
-            data : {
-                content,
-                autorId : userId,
-                reelId
+
+        const [comment] = await prisma.$transaction(async (tx) => {
+            const comment = await tx.comment.create({
+                data : {
+                    content,
+                    autorId : userId,
+                    reelId
+                }
+            });
+
+            if (reel.authorId !== userId)
+            {
+                await tx.notification.create({
+                    data : {
+                        type : "COMMENT",
+                        creatorId : userId,
+                        userId : reel.authorId,
+                        reelId
+                    }
+                });
             }
+
+            return [comment];
         })
+
+        
 
         revalidatePath("/reel")
         return {success : true, comment};

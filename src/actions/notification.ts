@@ -26,6 +26,13 @@ export async function getNotifications() {
                         image : true,
                     }
                 },
+                reel : {
+                    select: {
+                        id : true,
+                        content : true,
+                        videoUrl: true,
+                    }
+                },
                 comment : {
                     select : {
                         id : true,

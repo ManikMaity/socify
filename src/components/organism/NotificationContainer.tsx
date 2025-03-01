@@ -19,6 +19,18 @@ function NotificationContainer() {
     const [notifications, setNotifications] = useState<NotificationType[]>([]);
     const [laoding, setLoading] = useState(false);
 
+    function getLikedMessage (notification: NotificationType) {
+      if (notification.type === "FOLLOW"){
+        return "started following you"
+      }
+      else if (notification.type === "LIKE" && notification.reelId){
+        return "liked your reel"
+      }
+      else{
+        return "liked your post"
+      }
+    }
+
     const fetchNotifications = async () => {
       setLoading(true);
       try {
@@ -79,11 +91,7 @@ function NotificationContainer() {
                       <span className="font-medium">
                         {notification.creator.name ?? notification.creator.username}
                       </span>{" "}
-                      {notification.type === "FOLLOW"
-                        ? "started following you"
-                        : notification.type === "LIKE"
-                        ? "liked your post"
-                        : "commented on your post"}
+                      {getLikedMessage(notification)}
                     </span>
                   </div>
 
@@ -97,6 +105,27 @@ function NotificationContainer() {
                               src={notification.post.image}
                               alt="Post content"
                               className="mt-2 rounded-md w-full max-w-[200px] h-auto object-cover"
+                            />
+                          )}
+                        </div>
+
+                        {notification.type === "COMMENT" && notification.comment && (
+                          <div className="text-sm p-2 bg-accent/50 rounded-md">
+                            {notification.comment.content}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                  {notification.reel &&
+                    (notification.type === "LIKE" || notification.type === "COMMENT") && (
+                      <div className="pl-6 space-y-2">
+                        <div className="text-sm text-muted-foreground rounded-md p-2 bg-muted/30 mt-2">
+                          <p>{notification.reel.content}</p>
+                          {notification.reel.videoUrl && (
+                            <video
+                              src={notification.reel.videoUrl}
+                              className="mt-2 rounded-md w-auto max-h-[200px] object-cover"
                             />
                           )}
                         </div>

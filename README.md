@@ -47,4 +47,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - Add status 
 - Copy post link ✔️
 - Add yt video link
-- Add reels video feature
+- Add reels video feature ✔️

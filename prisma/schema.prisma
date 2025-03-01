@@ -28,8 +28,9 @@ model User {
   notification Notification[] @relation("userNotification")
   notificationCreated Notification[] @relation("notificationCreator")
   taggedUser TaggedUser[]
-
   Reel Reel[]
+  Status Status[]
+  viewers Viewer[] @relation("UserViewers")
 }
 
 model Post {
@@ -109,6 +110,27 @@ model Follow {
   @@index([followerId,followingId])
 }
 
+model Status {
+  id        String   @id @default(cuid())
+  authorId    String
+  image     String?
+  text     String?
+  song     String?
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  viewersIds Viewer[]
+  createdAt DateTime @default(now())
+}
+model Viewer{
+  id String @id @default(cuid())
+  userId String
+  statusId String?
+  user User @relation("UserViewers", fields: [userId], references: [id], onDelete: Cascade)
+  status Status? @relation(fields: [statusId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  @@index([userId,statusId])
+}
+
+
 model Notification {
   id         String   @id @default(cuid())
   userId     String
@@ -134,4 +156,5 @@ enum NotificationType {
   COMMENT
   FOLLOW
   TAG
+  STATUS
 }

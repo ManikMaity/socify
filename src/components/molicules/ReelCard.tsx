@@ -23,6 +23,7 @@ import { createReelComment, toogleReelLike } from "@/actions/reel.action";
 import { SignInButton, useUser } from "@clerk/nextjs";
 import { Textarea } from "../ui/textarea";
 import { formatDistanceToNow } from "date-fns";
+import { ScrollArea } from "../ui/scroll-area";
 
 interface ReelCardProps {
   reel: ReelType;
@@ -205,9 +206,9 @@ export function ReelCard({
             <DrawerHeader>
               <DrawerTitle>Comments</DrawerTitle>
             </DrawerHeader>
-            <div>
+            <ScrollArea className="p-4">
             {reel._count.comments > 0 ? reel.comments.map((comment) => (
-                  <div key={comment.id} className="flex space-x-3">
+                  <div key={comment.id} className="flex space-x-3 mb-3">
                     <Avatar className="size-8 flex-shrink-0">
                       <AvatarImage src={comment.author.image ?? "/avatar.png"} />
                     </Avatar>
@@ -226,7 +227,7 @@ export function ReelCard({
                     </div>
                   </div>
                 )) : <p className="text-center mt-4 text-foreground">No comments</p>}
-            </div>
+            </ScrollArea>
             <DrawerFooter>
             {userId ? (
                 <div className="flex space-x-3">
