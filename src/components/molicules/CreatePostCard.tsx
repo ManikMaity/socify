@@ -141,7 +141,7 @@ function CreatePostCard() {
           )
         }
 
-        <div className="flex items-center justify-between border-t pt-4">
+        <div className="flex items-center sm:flex-row flex-col gap-2 justify-between border-t pt-4">
           <div className="flex space-x-2">
             <Button
               type="button"
