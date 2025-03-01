@@ -5,19 +5,18 @@ import { getDBUserId } from "./user.action";
 import { revalidatePath } from "next/cache";
 
 export async function getBasicUserDataFromUsername(username: string) {
-    try {
-        const user = await prisma.user.findUnique({
-            where : {
-                username : username
-            }
-        })
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        username: username,
+      },
+    });
 
-        return user;
-    }
-    catch(error){
-        console.log("Error while getting basic user data", error);
-        return null;
-    }
+    return user;
+  } catch (error) {
+    console.log("Error while getting basic user data", error);
+    return null;
+  }
 }
 
 export async function getProfileFromUsername(username: string) {
@@ -44,6 +43,18 @@ export async function getProfileFromUsername(username: string) {
             createdAt: true,
             updatedAt: true,
             authorId: true,
+            taggedUser: {
+              include: {
+                user: {
+                  select: {
+                    id: true,
+                    name: true,
+                    username: true,
+                    image: true,
+                  },
+                },
+              },
+            },
             author: {
               select: {
                 id: true,
@@ -114,8 +125,21 @@ export async function getUserLikedPosts(userId: string) {
           },
         },
       },
+
       orderBy: { createdAt: "desc" },
       include: {
+        taggedUser: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                username: true,
+                image: true,
+              },
+            },
+          },
+        },
         author: {
           select: {
             id: true,
@@ -199,14 +223,13 @@ export async function isFollowingUser(userId: string) {
     const currentUserId = await getDBUserId();
     if (!currentUserId) throw new Error("You are not authenticated");
     const isFollowing = await prisma.follow.findFirst({
-        where : {
-            followerId : currentUserId,
-            followingId : userId
-        }
-    })
+      where: {
+        followerId: currentUserId,
+        followingId: userId,
+      },
+    });
 
     return !!isFollowing;
-
   } catch (error) {
     console.log("Error while checking if user is following", error);
     throw new Error("Error while checking if user is following");

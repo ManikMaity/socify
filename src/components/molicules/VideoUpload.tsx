@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { UploadDropzone } from "@/lib/uploadthing";
@@ -19,7 +18,7 @@ function VideoUpload({
   if (value) {
     return (
       <div className="relative size-40">
-        <video src={value} alt="Upload" className="rounded-md size-40 object-cover" />
+        <video src={value} controls className="rounded-md size-40 object-cover" />
       <button
         onClick={() => onChange("")}
         className="absolute top-0 right-0 p-1 bg-red-500 rounded-full shadow-sm"

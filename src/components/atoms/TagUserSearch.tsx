@@ -93,7 +93,7 @@ function TagUserSearch({
                         alt={user.name || ""}
                       />
                       <AvatarFallback>
-                        {user.name.charAt(0) || "U"}
+                        {user?.name?.charAt(0) || "U"}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">

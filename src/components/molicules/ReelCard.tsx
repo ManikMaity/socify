@@ -27,17 +27,14 @@ import { formatDistanceToNow } from "date-fns";
 interface ReelCardProps {
   reel: ReelType;
   isActive: boolean;
-  onVideoLoaded: () => void;
   userId: string;
 }
 
 export function ReelCard({
   reel,
   isActive,
-  onVideoLoaded,
   userId,
 }: ReelCardProps) {
-  const [isLoading, setIsLoading] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isLiking, setIsLiking] = useState(false);
   const [isCommenting, setIsCommenting] = useState(false);
@@ -124,12 +121,6 @@ export function ReelCard({
     }
   }, [isActive]);
 
-  // Handle video loaded
-  const handleVideoLoaded = () => {
-    setIsLoading(false);
-    onVideoLoaded();
-  };
-
   return (
     <div className="relative h-full w-full flex items-center justify-center bg-black">
       {/* Video */}
@@ -143,7 +134,6 @@ export function ReelCard({
         loop
         playsInline
         muted
-        onLoadedData={handleVideoLoaded}
       />
 
       {/* Content overlay */}

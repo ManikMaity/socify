@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SearchPost, SearchUser } from "@/config/interfaces";
 import { Card, CardContent } from "../ui/card";
@@ -37,7 +38,7 @@ function SearchContent({
                           alt={post.author.name || ""}
                         />
                         <AvatarFallback>
-                          {post?.author?.name[0]?.toUpperCase() || "U"}
+                          {post?.author?.name ? post.author.name[0].toUpperCase() : "U"}
                         </AvatarFallback>
                       </Avatar>
                       <div>

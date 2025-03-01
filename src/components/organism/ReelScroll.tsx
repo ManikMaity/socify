@@ -14,7 +14,6 @@ interface ReelScrollProps {
 export function ReelScroll({ reels, className = "", userId }: ReelScrollProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
-  const [videosLoaded, setVideosLoaded] = useState<Record<string, boolean>>({});
   const containerRef = useRef<HTMLDivElement>(null);
   const reelRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -86,13 +85,6 @@ export function ReelScroll({ reels, className = "", userId }: ReelScrollProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [activeIndex, reels.length]);
 
-  // Track when a video has loaded
-  const handleVideoLoaded = (reelId: string) => {
-    setVideosLoaded(prev => ({
-      ...prev,
-      [reelId]: true
-    }));
-  };
 
   return (
     <div 
@@ -110,7 +102,6 @@ export function ReelScroll({ reels, className = "", userId }: ReelScrollProps) {
             userId={userId}
             reel={reel} 
             isActive={index === activeIndex}
-            onVideoLoaded={() => handleVideoLoaded(reel.id)}
           />
         </div>
       ))}

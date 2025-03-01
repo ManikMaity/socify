@@ -96,6 +96,7 @@ export async function getPosts() {
         return {success : true, posts};
     }
     catch(error){
+        console.log("Error getting posts", error);  
         return {success : false, posts : []};
     }
 }
