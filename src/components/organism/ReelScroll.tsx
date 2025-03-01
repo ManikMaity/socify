@@ -8,9 +8,10 @@ import { ReelCard } from "../molicules/ReelCard";
 interface ReelScrollProps {
   reels: ReelType[];
   className?: string;
+  userId : string;
 }
 
-export function ReelScroll({ reels, className = "" }: ReelScrollProps) {
+export function ReelScroll({ reels, className = "", userId }: ReelScrollProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
   const [videosLoaded, setVideosLoaded] = useState<Record<string, boolean>>({});
@@ -106,6 +107,7 @@ export function ReelScroll({ reels, className = "" }: ReelScrollProps) {
           className="h-full w-full snap-start snap-always"
         >
           <ReelCard 
+            userId={userId}
             reel={reel} 
             isActive={index === activeIndex}
             onVideoLoaded={() => handleVideoLoaded(reel.id)}

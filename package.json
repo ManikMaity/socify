@@ -34,7 +34,8 @@
     "react-toastify": "^11.0.3",
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",
-    "uploadthing": "^7.5.2"
+    "uploadthing": "^7.5.2",
+    "vaul": "^1.1.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
