@@ -1,13 +1,10 @@
 "use client";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useState, useRef, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -22,7 +19,7 @@ import {
 import { formatNumber } from "@/lib/utilFunc";
 import { ReelType } from "@/config/interfaces";
 import { toast } from "react-toastify";
-import { toogleReelLike } from "@/actions/reel.action";
+import { createReelComment, toogleReelLike } from "@/actions/reel.action";
 import { SignInButton, useUser } from "@clerk/nextjs";
 import { Textarea } from "../ui/textarea";
 import { formatDistanceToNow } from "date-fns";
@@ -44,13 +41,10 @@ export function ReelCard({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isLiking, setIsLiking] = useState(false);
   const [isCommenting, setIsCommenting] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [newComment, setNewComment] = useState("");
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [liked, setLiked] = useState(
     reel.likes.some((like) => like.userId === userId)
   );
-  const [showFullContent, setShowFullContent] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [optimisticLikeCount, setOptimisticLikeCount] = useState(
     reel._count.likes
@@ -65,7 +59,11 @@ export function ReelCard({
       setOptimisticLikeCount(
         liked ? optimisticLikeCount - 1 : optimisticLikeCount + 1
       );
-      await toogleReelLike(reel.id);
+      const res = await toogleReelLike(reel.id);
+      if (!res?.success){
+      toast.error("Error while liking reel");
+      }
+
     } catch (error) {
       toast.error("Error while liking reel");
       console.log("Error while liking reel", error);
@@ -75,6 +73,25 @@ export function ReelCard({
       setIsLiking(false);
     }
   };
+
+    const handleReelComment = async () => {
+      if (isCommenting || !newComment.trim()) return;
+      setIsCommenting(true);
+      try {
+        const result = await createReelComment(newComment, reel.id);
+        if (result?.success) {
+          setNewComment("");
+          toast.success("Comment created successfully");
+        } else {
+          toast.error("Error while commenting on post");
+        }
+      } catch (error) {
+        toast.error("Error while commenting on post");
+        console.log("Error while commenting on post", error);
+      } finally {
+        setIsCommenting(false);
+      }
+    };
 
   // Handle video playback based on active state
   useEffect(() => {
@@ -235,6 +252,7 @@ export function ReelCard({
                     />
                     <div className="flex justify-end mt-2">
                       <Button
+                        onClick={handleReelComment}
                         size="sm"
                         className="flex items-center gap-2"
                         disabled={!newComment.trim() || isCommenting}

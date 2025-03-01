@@ -134,3 +134,35 @@ export async function toogleReelLike(reelId : string) {
         return {success : false};   
     }
 }
+
+
+export async function createReelComment (content : string, reelId : string) {
+    try {
+        if (!content.trim()) throw new Error("Please enter some text");
+        const userId = await getDBUserId();
+        if (!userId) throw new Error("User not authenticated");
+        // post not found, throw error
+        const reel = await prisma.reel.findUnique({
+            where : {
+                id : reelId
+            }
+        });
+        console.log(reel, userId);
+        if (!reel) throw new Error("Reel not found");
+        const comment = await prisma.comment.create({
+            data : {
+                content,
+                autorId : userId,
+                reelId
+            }
+        })
+
+        revalidatePath("/reel")
+        return {success : true, comment};
+        
+    }
+    catch(error){
+        console.log("Failed to create comment", error);
+        return {success : false, error};
+    }
+}

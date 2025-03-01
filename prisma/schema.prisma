@@ -74,15 +74,14 @@ model Comment {
   content   String
   autorId    String
   author      User     @relation(fields: [autorId], references: [id], onDelete: Cascade)
-  postId    String
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String?
+  post      Post?     @relation(fields: [postId], references: [id], onDelete: Cascade)
   reelId    String?
   reel      Reel?     @relation(fields: [reelId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Like Like[]
   notification Notification[]
-  @@index([autorId, postId]) 
 }
 
 model Like {
