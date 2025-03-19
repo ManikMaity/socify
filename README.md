@@ -1,49 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📸 Socify - A Social Media App  
 
-## Getting Started
+**Socify** is a modern social media application inspired by **Instagram**, built using **Next.js**. Users can create posts and reels, tag people, search for users and posts, like, comment, share, and interact with each other. The app supports real-time notifications, infinite scrolling for reels, dark/light mode, and a fully responsive design.
 
-First, run the development server:
+## 🚀 Features  
 
+- User authentication (Clerk)  
+- Create, edit, delete, and share posts & reels  
+- Tag users in posts  
+- Like, comment, and copy post links  
+- Follow/unfollow users  
+- Search for posts and users  
+- Real-time notifications for interactions  
+- Infinite scrolling for reels  
+- Profile page with edit functionality  
+- Responsive design with dark/light mode  
+
+## 📡 Live Website
+
+You can access the live version of **Socify** at [https://socify-green.vercel.app](https://socify-green.vercel.app).
+
+## 🛠 Tech Stack  
+
+- **Frontend:** `Next.js`,`React`, `TypeScript`, `ShadCN`, `TailwindCSS`, `UploadThing`, `React-Toastify`  
+- **Backend:** `Next.js Server Actions`, `Prisma`, `PostgreSQL`  
+- **Authentication:** `Clerk`  
+
+## 📷 Image Previews
+
+
+## 📌 Installation  
+
+#### Home
+<img src="./public/home.png" alt="Home Page"/>
+
+#### Search
+<img src="./public/search.png" alt="Search"/>
+
+#### Profile
+<img src="./public/profile.png" alt="Profile Page"/>
+
+#### Reel
+<img src="./public/reel.png" alt="Reel Page"/>
+
+#### Notifications
+<img src="./public/notification.png" alt="Notifications Page"/>
+
+### **Prerequisites**  
+- Node.js installed  
+- PostgreSQL database set up  
+
+### **Steps**  
+
+#### 1️⃣ Clone the Repository  
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/ManikMaity/socify.git
+cd socify
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### 2️⃣ Install Dependencies
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+#### 3️⃣ Create Environment Variables
+- Create a `.env` file in the root directory and add the following environment variables:
+```
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="your-public-key"
+CLERK_SECRET_KEY="your-secret-key"
+DATABASE_URL="your-database-url"
+UPLOADTHING_TOKEN="your-uploadthing-token"
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-
-## Features to Implement future
-- Like comment and repply to comment
-- Tag user ✔️
-- Message friend user 
-- Edit post  ✔️
-- Share post ✔️
-- Search post and user ✔️
-- Add friend and remove friend by request
-- Copy post link ✔️
-- Add yt video link
-- Add reels video feature ✔️
+#### 4️⃣ Run the App
+```bash
+npm run dev
+```
+- You should now be able to access the app at `http://localhost:3000`
