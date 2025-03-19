@@ -40,7 +40,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - Like comment and repply to comment
 - Tag user ✔️
 - Message friend user 
-- Edit post
+- Edit post 
 - Share post ✔️
 - Search post and user ✔️
 - Add friend and remove friend by request

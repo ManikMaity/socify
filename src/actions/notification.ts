@@ -58,14 +58,26 @@ export async function getUnreadNotificationsCount() {
     try {
         const userId = await getDBUserId();
         if (!userId) throw new Error("User not authenticated");
-        const count = await prisma.notification.count({
-            where : {
-                userId,
-                read : false
-            }
-        });
+        const data = await prisma.$transaction(async (tx) => {
+            const count = await prisma.notification.count({
+                where : {
+                    userId,
+                    read : false
+                }
+            });
+            const user = await prisma.user.findUnique({
+                where : {
+                    id : userId
+                },
+                select : {
+                    username : true
+                }
+            })
 
-        return {success : true, count};
+            return {count, username : user?.username || ""}
+        })
+       
+        return {success : true, data};
     }
     catch (error) {
         console.log(error);

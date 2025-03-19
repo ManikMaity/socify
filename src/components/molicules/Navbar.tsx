@@ -20,7 +20,7 @@ async function Navbar() {
         </Link>
       </div>
       <Search/>
-      <DestopNavItems notificationCount={notificationCount.count} />
+      <DestopNavItems username = {notificationCount.data?.username || ""} notificationCount={notificationCount.data?.count || 0} />
       <MobileNavItems />
     </header>
   );

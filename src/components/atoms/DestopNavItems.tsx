@@ -9,13 +9,13 @@ import {
 import { ThemeToggle } from "../atoms/ThemeToggle"
 import Link from "next/link"
 
-function DestopNavItems({notificationCount} : {notificationCount: number}) {
+function DestopNavItems({notificationCount, username} : {notificationCount: number, username : string}) {
   return (
     <nav className="hidden md:flex items-center justify-end gap-4 md:gap-6 w-[50%]">
     <ThemeToggle/>
     <SignedIn>
     {navLinks.map((link, index) => (
-        <Link key={index} href={link.href}>
+        <Link key={index} href={link.title === "Profile" ? link.href+=`/${username}` : link.href}>
             <Button variant="ghost">
                 <link.icon/>
                 {link.title}
