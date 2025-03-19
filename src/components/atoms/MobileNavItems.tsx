@@ -13,7 +13,7 @@ import Link from "next/link"
 import { ThemeToggle } from "./ThemeToggle"
 import { SignedIn, SignedOut, SignInButton, SignOutButton, UserButton } from "@clerk/nextjs"
 
-function MobileNavItems() {
+function MobileNavItems({username} : {username : string}) {
   return (
     <Sheet>
     <SheetTrigger asChild className="block md:hidden">
@@ -29,7 +29,7 @@ function MobileNavItems() {
       <div className="grid gap-4 py-4">
       <SignedIn>
       {navLinks.map((link, index) => (
-        <Link key={index} href={link.href}>
+        <Link key={index} href={link.title == "Profile" ? link.href+=`/${username}` : link.href}>
             <Button variant="ghost" className="w-full justify-start">
                 <link.icon/>
                 {link.title}

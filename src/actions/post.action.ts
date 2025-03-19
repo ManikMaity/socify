@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { getDBUserId } from "./user.action"
 import { revalidatePath } from "next/cache";
+import { UTApi } from "uploadthing/server";
 
 export async function createPost(content: string, imageUrl: string, taggedUsers: string[]) {
     try {
@@ -351,5 +352,55 @@ export async function getPostById (postId : string) {
     catch(error){
         console.log("Error getting post by id", error);
         return {success : false, post : null};
+    }
+}
+
+
+export async function deletePostImage (imageUrl : string) {
+    try {
+        const userId = await getDBUserId();
+        const post = await prisma.post.findFirst({
+            where : {
+                authorId : userId || "",
+                image : imageUrl
+            }
+        })
+        if (!post) return {success : false};
+        const utapi = new UTApi();
+        const newUrl = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+        await utapi.deleteFiles([newUrl]);
+        return {success : true};
+    }
+    catch(error){
+        console.log("Error deleting post image", error);
+        return {success : false};
+    }
+}
+
+
+export async function updatePost(postId : string, content : string, imageUrl : string | null) {
+    try {
+        const userId = await getDBUserId();
+        const post = await prisma.post.findUnique({
+            where : {
+                id : postId
+            }
+        });
+        if (post?.authorId !== userId) return {success : false, message : "You're not authorized to update"}
+        await prisma.post.update({
+            where : {
+                id : post.id
+            },
+            data : {
+                content : content,
+                image : imageUrl
+            }
+        })
+        revalidatePath("/");
+        return {success : true, message : "Post updated successfully"}
+    }
+    catch(error){
+        console.log("Error updating post", error);
+        return {success : false, message : "Error updating post"};
     }
 }

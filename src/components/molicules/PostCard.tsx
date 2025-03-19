@@ -7,13 +7,14 @@ import { toast } from "react-toastify";
 import { Card, CardContent } from "../ui/card";
 import Link from "next/link";
 import { Avatar, AvatarImage } from "../ui/avatar";
-import { HeartIcon, Loader2, LogInIcon, MessageCircleIcon, SendIcon, Share2, TrashIcon } from "lucide-react";
+import { Edit2Icon, HeartIcon, Loader2, LogInIcon, MessageCircleIcon, SendIcon, Share2, TrashIcon } from "lucide-react";
 import { SignInButton, useUser } from "@clerk/nextjs";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import {formatDistanceToNow} from "date-fns"
 import DeleteAlertDialog from "../atoms/DeleteAlertDialog";
 import ShareDialog from "../atoms/ShareDialog";
+import EditPostModal from "./EditPostModal";
 
 function PostCard({
   postData,
@@ -35,6 +36,7 @@ function PostCard({
   const [optimisticLikeCount, setOptimisticLikeCount] = useState(
     postData._count.likes
   );
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const {user} = useUser();
 
   const handleLike = async () => {
@@ -132,7 +134,15 @@ function PostCard({
                     <Button variant="ghost" size="sm" disabled={isDeleting}>
                         {isDeleting ? <Loader2 className="animate-spin"/> : <TrashIcon/>}
                     </Button>
-                    </DeleteAlertDialog>
+                  </DeleteAlertDialog>
+                )}
+                {userId === postData.author.id && (
+                  <>
+                   <Button variant="ghost" size="sm" onClick={() => setIsEditOpen(p => !p)}>
+                    <Edit2Icon/>
+                  </Button>
+                  <EditPostModal openEdit={isEditOpen} onCloseEdit={() => {setIsEditOpen(false)}} postData={postData} />
+                  </>
                 )}
                 <Button variant="ghost" size="sm" className="text-muted-foreground" onClick={() => setIsShareModalOpen(true)}>
                   <Share2/>
